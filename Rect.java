@@ -1,3 +1,8 @@
+package com.mark.testcollision;
+
+/**
+ * Created by Mark on 07-04-2016.
+ */
 public class Rect {
     int width;
     int height;
