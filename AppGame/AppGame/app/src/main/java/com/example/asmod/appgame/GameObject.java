@@ -2,11 +2,16 @@ package com.example.asmod.appgame;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by asmod on 10-04-2016.
  */
 public class GameObject {
+    List<GameObject> GO = new ArrayList<GameObject>();
     private Bitmap bitmap;
     private int x;
     private int y;
@@ -66,18 +71,25 @@ public class GameObject {
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
     }
-
-    public void handleActionDown(int eventX, int eventY) {
-        if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth()/2))) {
-            if (eventY >= (y - bitmap.getHeight() / 2) && (y <= (y + bitmap.getHeight() / 2))) {
-                setTouched(true);
-            } else {
-                setTouched(false);
-            }
-        } else {
-            setTouched(false);
+    public boolean iscolliding(GameObject other){
+        if (this.getX()<other.getX()+other.getBitmap().getWidth()&&
+                this.getX()+this.bitmap.getWidth()>other.getX()&&
+                this.getY()<other.getY()+other.bitmap.getHeight()&&
+                this.bitmap.getHeight()+this.getY()>other.getY())
+        {
+            return true;
         }
-
+        else {
+            return false;
+        }
+    }
+    public void onCollision()
+    {
+        for (GameObject gameobject:GO) {
+            if (iscolliding(gameobject)){
+                
+            }
+        }
     }
 
     public void update() {
@@ -87,9 +99,8 @@ public class GameObject {
         }
     }
 
-    public void move(int x, int y)
+    public void move(Speed speed)
     {
-        setX(x);
-        setY(y);
+        this.speed = speed;
     }
 }

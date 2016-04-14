@@ -1,6 +1,9 @@
 package com.example.asmod.appgame;
 
+
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.graphics.Canvas;
 
 import java.util.Random;
@@ -11,6 +14,8 @@ import java.util.Random;
 public class Beer {
 
     GameObject gameObject;
+    long instancetime = System.currentTimeMillis();
+    int y;
 
     public Beer(Bitmap bitmap, int x, int y)
     {
@@ -20,9 +25,26 @@ public class Beer {
     Random rand = new Random();
 
 
-    public void newBeer(){
-        new Beer(,rand.nextInt(0,Canvas.getWidth()),Canvas.getHeight(),0);
-    }
 
+    public void newBeer(Canvas canvas){
+
+        int x = rand.nextInt(canvas.getWidth());
+        new Beer (BitmapFactory.decodeResource(MainGamePanel.GetHackedContext().getResources(), R.drawable.DABØL),x,canvas.getHeight());
+
+    }
+    public void setGravity(int y)
+    {
+        this.y = y;
+     gameObject.move(new Speed(0,-y));
+    }
+    public void updateSpeed(){
+        long currenttime = System.currentTimeMillis();
+        long TimePassed = (currenttime - instancetime)/1000;
+        if (TimePassed>30)
+        {
+            y += 2;
+            instancetime = currenttime;
+        }
+    }
 
 }
