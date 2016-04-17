@@ -2,9 +2,13 @@ package com.example.asmod.appgame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,9 +19,10 @@ import android.view.SurfaceView;
  */
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
+    private String fps;
     private MainGameThread mainThread;
     private final static String Identifier = MainGamePanel.class.getSimpleName();
-    private GameObject hero;
+    private GameObject spaceship;
 
     //Hack
     static Context hackedContext;
@@ -29,22 +34,24 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         {
             public void onSwipeTop()
             {
-                hero.move(new Speed(0,0));
-                hero.setTouched(false);
+                spaceship.move(new Speed(0,0));
+                spaceship.setTouched(false);
             }
 
             public void onSwipeRight()
             {
-                hero.move(new Speed(5,0));
+                spaceship.move(new Speed(2,0));
             }
 
             public void onSwipeLeft()
             {
-                hero.move(new Speed(-5,0));
+                spaceship.move(new Speed(-2,0));
             }
         });
 
-        hero = new GameObject(BitmapFactory.decodeResource(getResources(), R.drawable.hero), 50, 100);
+        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.spaceship_forward);
+
+        spaceship = new GameObject(bMap,getScreenWidth()/2,getScreenHeight()-bMap.getHeight());
 
         mainThread = new MainGameThread(getHolder(), this);
         setFocusable(true); //Styrer alle events
@@ -80,59 +87,53 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
         }
     }
-/*
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        if(event.getAction() == MotionEvent.ACTION_DOWN)
-        {
-            hero.handleActionDown((int)event.getX(), (int)event.getY());
-            if(event.getY() > getHeight() - 50)
-            {
-                mainThread.setRunning(false);
-                ((Activity)getContext()).finish();
-            }
-        }
-        if(event.getAction() == MotionEvent.ACTION_MOVE)
-        {
-            if(hero.isTouched())
-            {
-                hero.move((int)event.getX(), (int)event.getY());
-            }
-        }
-        if(event.getAction() == MotionEvent.ACTION_UP)
-        {
-            if(hero.isTouched())
-            {
-                hero.setTouched(false);
-            }
-        }
-        return true;
-    }
-*/
+
     public void update() {
-        if (hero.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-                && hero.getX() + hero.getBitmap().getWidth() / 2 >= getWidth()) {
-            hero.getSpeed().toggleXDirection();
+        if (spaceship.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+                && spaceship.getX() + spaceship.getBitmap().getWidth() / 2 >= getWidth()) {
+            spaceship.getSpeed().toggleXDirection();
         }
-        if (hero.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-                && hero.getX() - hero.getBitmap().getWidth() / 2 <= 0) {
-            hero.getSpeed().toggleXDirection();
+        if (spaceship.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+                && spaceship.getX() - spaceship.getBitmap().getWidth() / 2 <= 0) {
+            spaceship.getSpeed().toggleXDirection();
         }
-        if (hero.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-                && hero.getY() + hero.getBitmap().getHeight() / 2 >= getHeight()) {
-            hero.getSpeed().toggleYDirection();
+        if (spaceship.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+                && spaceship.getY() + spaceship.getBitmap().getHeight() / 2 >= getHeight()) {
+            spaceship.getSpeed().toggleYDirection();
         }
-        if (hero.getSpeed().getyDirection() == Speed.DIRECTION_UP
-                && hero.getY() - hero.getBitmap().getHeight() / 2 <= 0) {
-            hero.getSpeed().toggleYDirection();
+        if (spaceship.getSpeed().getyDirection() == Speed.DIRECTION_UP
+                && spaceship.getY() - spaceship.getBitmap().getHeight() / 2 <= 0) {
+            spaceship.getSpeed().toggleYDirection();
         }
-        hero.update();
+        spaceship.update();
     }
 
     protected void render(Canvas canvas)
     {
-       canvas.drawColor(Color.BLACK);
-        hero.draw(canvas);
+      // canvas.drawColor(Color.BLACK);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_bg), 0, 0, null);
+        spaceship.draw(canvas);
+        displayFps(canvas);
     }
+
+    public void setFPS(String fps)
+    {
+        this.fps = fps;
+    }
+    private void displayFps(Canvas canvas) {
+        if (canvas != null && this.fps != null) {
+            Paint paint = new Paint();
+            paint.setARGB(255, 255, 255, 255);
+            canvas.drawText(this.fps, this.getWidth() - 50, 20, paint);
+        }
+    }
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
 }
