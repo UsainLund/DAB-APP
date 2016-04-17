@@ -29,7 +29,7 @@ public class Beer {
     public void newBeer(Canvas canvas){
 
         int x = rand.nextInt(canvas.getWidth());
-        new Beer (BitmapFactory.decodeResource(MainGamePanel.GetHackedContext().getResources(), R.drawable.DABØL),x,canvas.getHeight());
+        new Beer (BitmapFactory.decodeResource(MainGamePanel.GetHackedContext().getResources(), R.drawable.daboel),x,canvas.getHeight());
 
     }
     public void setGravity(int y)
