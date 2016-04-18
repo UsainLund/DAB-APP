@@ -87,9 +87,8 @@ public class GameObject {
         }
     }
 
-    public void move(int x, int y)
+    public void move(Speed speed)
     {
-        setX(x);
-        setY(y);
+        this.speed = speed;
     }
 }
