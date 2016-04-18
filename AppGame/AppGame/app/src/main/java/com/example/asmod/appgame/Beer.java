@@ -35,7 +35,7 @@ public class Beer {
     public void setGravity(int y)
     {
         this.y = y;
-     gameObject.move(new Speed(0,-y));
+        gameObject.move(new Speed(0,-y));
     }
     public void updateSpeed(){
         long currenttime = System.currentTimeMillis();

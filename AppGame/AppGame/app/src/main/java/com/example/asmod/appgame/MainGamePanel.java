@@ -13,6 +13,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by asmod on 10-04-2016.
@@ -23,11 +27,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainGameThread mainThread;
     private final static String Identifier = MainGamePanel.class.getSimpleName();
     private GameObject spaceship;
-
+    public static List<GameObject> GO = new ArrayList<GameObject>();
     //Hack
     static Context hackedContext;
     public MainGamePanel(Context context) {
         super(context);
+        ImageView view = new ImageView(context);
+
         hackedContext = context;
         getHolder().addCallback(this); //Tilføj MainGamePanel som den klasse der styrer input
         this.setOnTouchListener(new OnSwipeTouchListener(context)
@@ -51,7 +57,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.spaceship_forward);
 
-        spaceship = new GameObject(bMap,getScreenWidth()/2,getScreenHeight()-bMap.getHeight());
+        spaceship = new GameObject(bMap,getScreenWidth()/2,getScreenHeight()-bMap.getHeight(), true);
 
         mainThread = new MainGameThread(getHolder(), this);
         setFocusable(true); //Styrer alle events
