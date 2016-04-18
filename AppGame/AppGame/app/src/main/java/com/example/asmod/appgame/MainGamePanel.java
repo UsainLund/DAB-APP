@@ -21,26 +21,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public MainGamePanel(Context context) {
         super(context);
         getHolder().addCallback(this); //Tilføj MainGamePanel som den klasse der styrer input
-        this.setOnTouchListener(new OnSwipeTouchListener(context)
-        {
-            public void onSwipeTop()
-            {
-                hero.move(new Speed(0,0));
-                hero.setTouched(false);
-            }
-
-            public void onSwipeRight()
-            {
-                hero.move(new Speed(1,0));
-            }
-
-            public void onSwipeLeft()
-            {
-                hero.move(new Speed(-1,0));
-            }
-        });
-
-        hero = new GameObject(BitmapFactory.decodeResource(getResources(), R.drawable.hero), 50, 100);
+        hero = new GameObject(BitmapFactory.decodeResource(getResources(), R.drawable.hero), 50, 50);
 
         mainThread = new MainGameThread(getHolder(), this);
         setFocusable(true); //Styrer alle events
@@ -72,7 +53,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
         }
     }
-/*
+
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -101,29 +82,35 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         return true;
     }
-*/
+
     public void update() {
+        // check collision with right wall if heading right
         if (hero.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
                 && hero.getX() + hero.getBitmap().getWidth() / 2 >= getWidth()) {
             hero.getSpeed().toggleXDirection();
         }
+        // check collision with left wall if heading left
         if (hero.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
                 && hero.getX() - hero.getBitmap().getWidth() / 2 <= 0) {
             hero.getSpeed().toggleXDirection();
         }
+        // check collision with bottom wall if heading down
         if (hero.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
                 && hero.getY() + hero.getBitmap().getHeight() / 2 >= getHeight()) {
             hero.getSpeed().toggleYDirection();
         }
+        // check collision with top wall if heading up
         if (hero.getSpeed().getyDirection() == Speed.DIRECTION_UP
                 && hero.getY() - hero.getBitmap().getHeight() / 2 <= 0) {
             hero.getSpeed().toggleYDirection();
         }
+        // Update the lone droid
         hero.update();
     }
 
     protected void render(Canvas canvas)
     {
+        
        canvas.drawColor(Color.BLACK);
         hero.draw(canvas);
     }

@@ -67,7 +67,18 @@ public class GameObject {
         canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
     }
 
+    public void handleActionDown(int eventX, int eventY) {
+        if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth()/2))) {
+            if (eventY >= (y - bitmap.getHeight() / 2) && (y <= (y + bitmap.getHeight() / 2))) {
+                setTouched(true);
+            } else {
+                setTouched(false);
+            }
+        } else {
+            setTouched(false);
+        }
 
+    }
 
     public void update() {
         if (!touched) {
@@ -76,8 +87,9 @@ public class GameObject {
         }
     }
 
-    public void move(Speed speed)
+    public void move(int x, int y)
     {
-        this.speed = speed;
+        setX(x);
+        setY(y);
     }
 }
